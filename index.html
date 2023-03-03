@@ -5,9 +5,68 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
-    <title>Práctica: Carrito de la compra</title>
+    <title>Práctica: carrito de compra</title>
 </head>
 <body>
+
+    <header class="grid-container bg-color">
+        <p class="grid-item title">Práctica carrito de compra</p>
+    </header>
+
+    <main>
+
+        <section class="grid-container-tabla">
+            <div id="carrito" class="grid-item-tabla carrito">
+                <!-- <img src="" alt=""> -->
+            </div>
+
+            <div class="grid-item-tabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="pintar-tabla-carrito">
+                        <!-- <tr>
+                            <td>img</td>
+                            <td>nombre</td>
+                            <td>precio</td>
+                            <td>cantidad</td>
+                            <td>subtotal</td>
+                        </tr> -->
+                    </tbody>
+                </table>
+
+                <div id="botones-tabla">
+                    <button>Vaciar carrito</button>
+                    <button>Comprar</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="productos" class="grid-container">
+            <div class="grid-item">
+                <h2>Productos</h2>
+            </div>
+
+            <div id="pintar-cards" class="grid-container-cards">
+                <!-- <article class = "grid-item-cards">
+                        <div>img: producto</div>
+                        <div>h3: nombre producto</div>
+                        <div>p: precio</div>
+                        <div>img: rating (stars)</div>
+                        <div>button: añadir al carrito</div>
+                </article> -->
+            </div>
+        </section>
+
+    </main>
     
 
     <script src="js/main.js"></script>

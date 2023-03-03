@@ -5,10 +5,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
-    <title>Práctica: Carrito de la compra | Finalizar compra</title>
+    <title>Práctica: carrito de compra | Finalizar compra</title>
 </head>
 <body>
-    
+
+    <header class="grid-container bg-color">
+        <p class="grid-item title">Práctica carrito de compra</p>
+    </header>
+
+    <main>
+
+        <div id="btn-volver" class="flex padding">
+            <button>Volver</button>
+        </div>
+
+        <section>
+            <div class="grid-container">
+                <h2 class="grid-item">Productos</h2>
+            </div>
+
+            <div id="pintar-carrito" class="grid-container">
+                <table>
+                    <thead class="grid-item">
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tabla-final" class="grid-item">
+                        <!-- <tr>
+                            <td>img</td>
+                            <td>nombre</td>
+                            <td>precio</td>
+                            <td>cantidad</td>
+                            <td>subtotal</td>
+                        </tr> -->
+                    </tbody>
+                </table>
+
+                <div id="total-finalizar-compra" class="flex">Total: …</div>
+
+                <div id="btn-finalizar-compra" class="padding">
+                    <button>Finalizar compra</button>
+                </div>
+            </div>
+
+        </section>
+
+    </main>    
 
     <script src="js/main.js"></script>
 </body>
