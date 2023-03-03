@@ -5,10 +5,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
-    <title>Práctica: Carrito de la compra | Finalizar compra</title>
+    <title>Práctica: carrito de compra | Finalizar compra</title>
 </head>
 <body>
-    
+
+    <header class="grid-container">
+        <p>Práctica carrito de compra</p>
+    </header>
+
+    <main>
+
+        <div id="btn-volver">
+            <button>Volver</button>
+        </div>
+
+        <section>
+            <div class="grid-item">
+                <h2>Productos</h2>
+            </div>
+
+            <div id="pintar-carrito" class="grid-item">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tabla">
+                        <tr> <!-- tr -->
+                        <td>img</td> <!-- td: img -->
+                        <td>nombre</td> <!-- td: nombre -->
+                        <td>precio</td> <!-- td: precio -->
+                        <td>cantidad</td> <!-- td: cantidad -->
+                        <td>subtotal</td><!-- td: sub-total -->
+                        </tr> <!-- tr -->
+                    </tbody>
+                </table>
+
+                <div id="total-finalizar-compra">Total: …</div>
+
+                <div id="btn-finalizar-compra">
+                    <div>button: Finalizar compra</div> <!-- button: Finalizar compra -->
+                </div>
+            </div>
+
+        </section>
+
+    </main>    
 
     <script src="js/main.js"></script>
 </body>
