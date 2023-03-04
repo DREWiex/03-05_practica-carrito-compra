@@ -29,8 +29,8 @@
 
 .position-absolute{
     position: absolute;
-    top: 50%;
-    left: 30%;
+    top: 80%;
+    right: 10%;
     background-color: hsl(0, 0%, 0%, 0.1);
 }
 
@@ -76,6 +76,10 @@ td{
     text-align: center;
 }
 
+td img{
+    width: 50%;
+}
+
 .flex{
     display: flex;
     justify-content: flex-end;
@@ -99,6 +103,10 @@ td{
 
 .hidden{
     visibility: hidden;
+}
+
+.margin{
+    margin: 80px;
 }
 
 /* ===================================
