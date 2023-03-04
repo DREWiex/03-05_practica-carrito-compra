@@ -20,10 +20,18 @@
 .grid-container-tabla{
     display: grid;
     grid-template-columns: 1fr 2fr;
+    position: relative;
 }
 
 .grid-item-tabla{
     grid-column: 2 / 3;
+}
+
+.position-absolute{
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    background-color: hsl(0, 0%, 0%, 0.1);
 }
 
 #carrito{
@@ -45,9 +53,15 @@
 }
 
 .title{
+    font-size: 30px;
     text-align: center;
     text-transform: uppercase;
+    font-weight: bold;
     padding: 10px;
+}
+
+.fa-cart-shopping{
+    font-size: 35px;
 }
 
 img{
