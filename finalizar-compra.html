@@ -1,15 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/main.css">
-    <title>Práctica: Carrito de la compra | Finalizar compra</title>
-</head>
-<body>
-    
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="css/main.css">
+        <title>Práctica: carrito de compra | Finalizar compra</title>
+    </head>
+    <body>
 
-    <script src="js/main.js"></script>
-</body>
+        <header class="grid-container bg-color">
+            <p class="grid-item title">Práctica carrito de compra</p>
+        </header>
+
+        <main>
+
+            <div class="flex padding">
+                <button id="volver">Volver</button>
+            </div>
+
+            <section>
+                <div class="grid-container">
+                    <h2 class="grid-item">Productos</h2>
+                </div>
+
+                <div id="pintar-carrito" class="grid-container">
+                    <table class="margin">
+                        <thead class="grid-item">
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th></th> <!-- (-) -->
+                                <th>Cantidad</th>
+                                <th></th> <!-- (+) -->
+                                <th>Subtotal</th>
+                                <th></th> <!-- (x) -->
+                            </tr>
+                        </thead>
+
+                        <tbody id="pintar-tabla-carrito" class="grid-item">
+                            <!-- <tr>
+                                <td>img</td>
+                                <td>nombre</td>
+                                <td>precio</td>
+                                <td>cantidad</td>
+                                <td>subtotal</td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+
+                    <div id="total-finalizar-compra" class="flex">
+                        <!-- <p>Total: </p> -->
+                    </div>
+
+                    <form class="padding">
+                        <input type="submit" id="btn-finalizar-compra" value="Finalizar compra">
+                    </form>
+                </div>
+
+            </section>
+
+        </main>    
+
+        <script src="js/main.js"></script>
+    </body>
 </html>

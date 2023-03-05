@@ -1,0 +1,138 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.grid-container{
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 10px;
+    gap: 20px;
+}
+
+.grid-item{
+    margin: 10px;
+    padding: 10px;
+}
+
+.grid-container-tabla{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    position: relative;
+}
+
+.grid-item-tabla{
+    grid-column: 2 / 3;
+}
+
+.position-absolute{
+    position: absolute;
+    top: 80%;
+    right: 10%;
+    background-color: hsl(0, 0%, 0%, 0.2);
+}
+
+#carrito{
+    display: grid;
+    justify-content: flex-end;
+    margin-right: 40px;
+}
+
+.grid-container-cards{
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 10px;
+    gap: 10px;
+}
+
+.grid-item-cards{
+    padding: 10px;
+    border: 1px solid hsla(0, 0%, 83%, 0.5);
+}
+
+.title{
+    font-size: 30px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.fa-cart-shopping{
+    font-size: 35px;
+}
+
+img{
+    width: 100%;
+}
+
+th{
+    padding: 5px;
+}
+
+td{
+    text-align: center;
+}
+
+td img{
+    width: 50%;
+}
+
+.flex{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 40px;
+}
+
+.bg-color{
+    background-color: beige;
+}
+
+#botones-tabla{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 40px;
+    gap: 5px;
+}
+
+.padding{
+    padding: 20px;
+}
+
+.hidden{
+    visibility: hidden;
+}
+
+.margin{
+    margin: 80px;
+}
+
+/* ===================================
+                     media query 768px
+======================================*/
+@media screen and (min-width:768px) {
+    .grid-container-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+/*768px end.*/
+/* ===================================
+                     media query 992px
+======================================*/
+@media screen and (min-width:992px) {
+    .grid-container-cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+/*992px end.*/
+/* ===================================
+                    media query 1200px
+======================================*/
+@media screen and (min-width:1200px) {
+    .grid-container-cards {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+/*1200px end.*/
