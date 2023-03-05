@@ -14,6 +14,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const estrellas = ['assets/star1.png', 'assets/star2.png'];
 
+    const arrayCategories = [
+        "smartphones",
+        "laptops",
+        "fragrances",
+        "skincare",
+        "groceries",
+        "home-decoration",
+        "furniture",
+        "tops",
+        "womens-dresses",
+        "womens-shoes",
+        "mens-shirts",
+        "mens-shoes",
+        "mens-watches",
+        "womens-watches",
+        "womens-bags",
+        "womens-jewellery",
+        "sunglasses",
+        "automotive",
+        "motorcycle",
+        "lighting"
+      ];
+
 
     //* Capturas *//
     const divCards = document.querySelector('#pintar-cards');
@@ -106,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }; //!FUNC-REQUEST
 
 
-/*
+
     const pintarCards = async () => { //! (pinta todas las cards)
 
         const {ok, solicitud} = await request();
@@ -152,63 +175,62 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
     }; //!FUNC-PINTARCARDS
-*/
 
 
 
-    const pintarCards = async () => { //* (pinta solo tres cards)
+    // const pintarCards = async () => { //* (pinta solo tres cards)
 
-        const {ok, solicitud} = await request();
+    //     const {ok, solicitud} = await request();
 
-        const {products} = solicitud;
+    //     const {products} = solicitud;
 
-        let productos = [];
+    //     let productos = [];
 
-        if(ok){
+    //     if(ok){
 
-            for(let i = 0; i < 3; i++){
+    //         for(let i = 0; i < 3; i++){
             
-                productos.push(products[i]);
+    //             productos.push(products[i]);
             
-            }
+    //         }
 
-            productos.forEach((item) => {
+    //         productos.forEach((item) => {
 
-                const elementArticle = document.createElement('ARTICLE');
-                elementArticle.classList.add('grid-item-cards');
+    //             const elementArticle = document.createElement('ARTICLE');
+    //             elementArticle.classList.add('grid-item-cards');
     
-                const elementImg = document.createElement('IMG');
-                elementImg.src = item.images[0];
+    //             const elementImg = document.createElement('IMG');
+    //             elementImg.src = item.images[0];
     
-                const elementHeader = document.createElement('H3');
-                elementHeader.innerHTML = item.title;
+    //             const elementHeader = document.createElement('H3');
+    //             elementHeader.innerHTML = item.title;
     
-                const elementP = document.createElement('P');
-                elementP.innerHTML = `Precio: ${item.price.toLocaleString('de-DE')} €`;
+    //             const elementP = document.createElement('P');
+    //             elementP.innerHTML = `Precio: ${item.price.toLocaleString('de-DE')} €`;
     
-                const divRating = document.createElement('DIV'); //! cambiar por IMG
-                divRating.id = "div-rating";
-                //divRating.textContent = Math.round(item.rating);
-                const rating = pintarEstrellas(item.id);
+    //             const divRating = document.createElement('DIV'); //! cambiar por IMG
+    //             divRating.id = "div-rating";
+    //             //divRating.textContent = Math.round(item.rating);
+    //             const rating = pintarEstrellas(item.id);
     
-                const elementButton = document.createElement('BUTTON');
-                elementButton.classList.add('card-btn');
-                elementButton.dataset['id'] = item.id;
-                elementButton.textContent = "Añadir al carrito";
+    //             const elementButton = document.createElement('BUTTON');
+    //             elementButton.classList.add('card-btn');
+    //             elementButton.dataset['id'] = item.id;
+    //             elementButton.textContent = "Añadir al carrito";
 
-                divRating.append(rating);
+    //             divRating.append(rating);
         
-                elementArticle.append(elementImg, elementHeader, elementP, divRating, elementButton);
+    //             elementArticle.append(elementImg, elementHeader, elementP, divRating, elementButton);
     
-                fragment.append(elementArticle);
+    //             fragment.append(elementArticle);
     
-            });
+    //         });
 
-            divCards.append(fragment);
+    //         divCards.append(fragment);
         
-        }
+    //     }
 
-    }; //!FUNC-PINTARCARDS
+    // }; //!FUNC-PINTARCARDS
 
 
 
