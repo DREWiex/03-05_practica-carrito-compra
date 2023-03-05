@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fragment = document.createDocumentFragment();
 
-    const arrayProductosSeleccionados =  JSON.parse(localStorage.getItem('productos')) || [];
+    const arrayProductosSeleccionados = JSON.parse(localStorage.getItem('productos')) || [];
 
     const estrellas = ['assets/star1.png', 'assets/star2.png'];
 
@@ -106,8 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }; //!FUNC-REQUEST
 
 
-
-    const pintarCards = async () => { //! incompleta
+/*
+    const pintarCards = async () => { //! (pinta todas las cards)
 
         const {ok, solicitud} = await request();
 
@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 elementP.innerHTML = `Precio: ${item.price.toLocaleString('de-DE')} €`;
 
                 const divRating = document.createElement('DIV'); //! cambiar por IMG
+                divRating.id = "div-rating";
                 const rating = pintarEstrellas(item.id);
                 //divRating.textContent = Math.round(item.rating);
 
@@ -149,6 +150,63 @@ document.addEventListener('DOMContentLoaded', () => {
             divCards.append(fragment);
 
         };
+
+    }; //!FUNC-PINTARCARDS
+*/
+
+
+
+    const pintarCards = async () => { //* (pinta solo tres cards)
+
+        const {ok, solicitud} = await request();
+
+        const {products} = solicitud;
+
+        let productos = [];
+
+        if(ok){
+
+            for(let i = 0; i < 3; i++){
+            
+                productos.push(products[i]);
+            
+            }
+
+            productos.forEach((item) => {
+
+                const elementArticle = document.createElement('ARTICLE');
+                elementArticle.classList.add('grid-item-cards');
+    
+                const elementImg = document.createElement('IMG');
+                elementImg.src = item.images[0];
+    
+                const elementHeader = document.createElement('H3');
+                elementHeader.innerHTML = item.title;
+    
+                const elementP = document.createElement('P');
+                elementP.innerHTML = `Precio: ${item.price.toLocaleString('de-DE')} €`;
+    
+                const divRating = document.createElement('DIV'); //! cambiar por IMG
+                divRating.id = "div-rating";
+                //divRating.textContent = Math.round(item.rating);
+                const rating = pintarEstrellas(item.id);
+    
+                const elementButton = document.createElement('BUTTON');
+                elementButton.classList.add('card-btn');
+                elementButton.dataset['id'] = item.id;
+                elementButton.textContent = "Añadir al carrito";
+
+                divRating.append(rating);
+        
+                elementArticle.append(elementImg, elementHeader, elementP, divRating, elementButton);
+    
+                fragment.append(elementArticle);
+    
+            });
+
+            divCards.append(fragment);
+        
+        }
 
     }; //!FUNC-PINTARCARDS
 
@@ -189,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const pintarEstrellas = async (id) => { //! "funciona", pero devuelve [object Promise] //? ¿podría utilizar un switch?
+    const pintarEstrellas = async (id) => { //! "funciona", pero devuelve [object Promise]
 
         const {solicitud} = await request();
 
@@ -300,14 +358,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return JSON.parse(localStorage.getItem('productos')) || [];
 
     }; //!FUNC-GETLOCAL
-    
 
+    
 
     const pintarTabla = (id) => { //! incompleta
 
         pintarTablaCarrito.innerHTML = '';
 
         const productos = getLocal();
+
+        let contador = 1;
 
         let encontrarProducto = productos.find((item) => item.id == id);
 
@@ -336,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 circleMinus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-minus');
 
                 const cantidadTD = document.createElement('TD');
-                cantidadTD.textContent = '(cantidad)';
+                cantidadTD.textContent = contador++;
 
                 const plusTD = document.createElement('TD');
                 const circlePlus = document.createElement('I');
@@ -411,6 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }; //!FUNC-INIT
 
+    
     init();
 
 
