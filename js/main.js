@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const arrayProductosSeleccionados =  JSON.parse(localStorage.getItem('productos')) || [];
 
-    const arrayProductosEliminados = [];
+    const estrellas = ['assets/star1.png', 'assets/star2.png'];
 
 
     //* Capturas *//
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(target.matches('.card-btn')){ //* subir al localStorage cuando haga click en el botón
             const id = target.dataset.id;
             almacenarDatos(id);
-            pintarTabla();
+            pintarTabla(id);
         };
 
         if(target.matches('#xmark')){
@@ -61,7 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         if(target.matches('#btn-finalizar-compra')){
-            alert('¡Has finalizado tu compra satisfactoriamente!')
+            alert('¡Has finalizado tu compra satisfactoriamente!');
+            localStorage.removeItem('productos');
         };
 
 
@@ -108,29 +109,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const pintarCards = async () => { //! incompleta
 
-        let {ok, solicitud} = await request();
+        const {ok, solicitud} = await request();
 
-        let {products} = solicitud;
+        const {products} = solicitud;
 
         if(ok){
             
             products.forEach((item) => {
+
                 const elementArticle = document.createElement('ARTICLE');
-                elementArticle.classList.add('grid-item-cards')
+                elementArticle.classList.add('grid-item-cards');
+
                 const elementImg = document.createElement('IMG');
                 elementImg.src = item.images[0];
+
                 const elementHeader = document.createElement('H3');
-                elementHeader.textContent = item.title
+                elementHeader.innerHTML = item.title;
+
                 const elementP = document.createElement('P');
                 elementP.innerHTML = `Precio: ${item.price.toLocaleString('de-DE')} €`;
-                const elementRating = document.createElement('P'); //! cambiar por IMG
-                elementRating.textContent = '(aquí se pintarán las estrellas)';
+
+                const divRating = document.createElement('DIV'); //! cambiar por IMG
+                const rating = pintarEstrellas(item.id);
+                //divRating.textContent = Math.round(item.rating);
+
                 const elementButton = document.createElement('BUTTON');
                 elementButton.classList.add('card-btn');
                 elementButton.dataset['id'] = item.id;
                 elementButton.textContent = "Añadir al carrito";
 
-                elementArticle.append(elementImg, elementHeader, elementP, elementRating, elementButton);
+                divRating.append(rating);
+
+                elementArticle.append(elementImg, elementHeader, elementP, divRating, elementButton);
 
                 fragment.append(elementArticle);
 
@@ -151,13 +161,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const {products} = solicitud;
 
         let productos = products.find((item) => item.id == id);
+        console.log(productos);
 
         if(productos.stock > 0){ //* valido que haya stock antes de subir al local
+
             let objProductosTabla = { //! falta el spread(?) para cantidad y subtotal
                 id: productos.id,
                 foto: productos.thumbnail,
                 nombre: productos.title,
-                precio: productos.price
+                precio: productos.price,
+                rating: productos.rating,
+                stock: productos.stock,
                 //cantidad: //! falta añadir cantidad
                 //subtotal: //! falta añadir subtotal
             }
@@ -166,10 +180,110 @@ document.addEventListener('DOMContentLoaded', () => {
             setLocal();
 
         }else{
+
             console.log('Stock is empty!');
+
         }
 
     }; //!FUNC-ALMACENARDATOS
+
+
+
+    const pintarEstrellas = async (id) => { //! "funciona", pero devuelve [object Promise] //? ¿podría utilizar un switch?
+
+        const {solicitud} = await request();
+
+        const {products} = solicitud;
+
+        const rating = products.find((item) => item.id == id)?.rating;
+
+        let valor = Math.round(rating);
+
+        if(valor == 0){
+            const estrellaUno = document.createElement('IMG');
+            estrellaUno.src = estrellas[1];
+            const estrellaDos = document.createElement('IMG');
+            estrellaDos.src = estrellas[1];
+            const estrellaTres = document.createElement('IMG');
+            estrellaTres.src = estrellas[1];
+            const estrellaCuatro = document.createElement('IMG');
+            estrellaCuatro.src = estrellas[1];
+            const estrellaCinco = document.createElement('IMG');
+            estrellaCinco.src = estrellas[1];
+            console.log('Pinto opción 0')
+        };
+
+        if(valor == 1){
+            const estrellaUno = document.createElement('IMG');
+            estrellaUno.src = estrellas[0];
+            const estrellaDos = document.createElement('IMG');
+            estrellaDos.src = estrellas[1];
+            const estrellaTres = document.createElement('IMG');
+            estrellaTres.src = estrellas[1];
+            const estrellaCuatro = document.createElement('IMG');
+            estrellaCuatro.src = estrellas[1];
+            const estrellaCinco = document.createElement('IMG');
+            estrellaCinco.src = estrellas[1];
+            console.log('Pinto opción 1')
+        };
+
+        if(valor == 2){
+            const estrellaUno = document.createElement('IMG');
+            estrellaUno.src = estrellas[0];
+            const estrellaDos = document.createElement('IMG');
+            estrellaDos.src = estrellas[0];
+            const estrellaTres = document.createElement('IMG');
+            estrellaTres.src = estrellas[1];
+            const estrellaCuatro = document.createElement('IMG');
+            estrellaCuatro.src = estrellas[1];
+            const estrellaCinco = document.createElement('IMG');
+            estrellaCinco.src = estrellas[1];
+            console.log('Pinto opción 2')
+        };
+        
+        if(valor == 3){
+            const estrellaUno = document.createElement('IMG');
+            estrellaUno.src = estrellas[0];
+            const estrellaDos = document.createElement('IMG');
+            estrellaDos.src = estrellas[0];
+            const estrellaTres = document.createElement('IMG');
+            estrellaTres.src = estrellas[0];
+            const estrellaCuatro = document.createElement('IMG');
+            estrellaCuatro.src = estrellas[1];
+            const estrellaCinco = document.createElement('IMG');
+            estrellaCinco.src = estrellas[1];
+            console.log('Pinto opción 3')
+        };
+
+        if(valor == 4){
+            const estrellaUno = document.createElement('IMG');
+            estrellaUno.src = estrellas[0];
+            const estrellaDos = document.createElement('IMG');
+            estrellaDos.src = estrellas[0];
+            const estrellaTres = document.createElement('IMG');
+            estrellaTres.src = estrellas[0];
+            const estrellaCuatro = document.createElement('IMG');
+            estrellaCuatro.src = estrellas[0];
+            const estrellaCinco = document.createElement('IMG');
+            estrellaCinco.src = estrellas[1];
+            console.log('Pinto opción 4')
+        };
+
+        if(valor == 5){
+            const estrellaUno = document.createElement('IMG');
+            estrellaUno.src = estrellas[0];
+            const estrellaDos = document.createElement('IMG');
+            estrellaDos.src = estrellas[0];
+            const estrellaTres = document.createElement('IMG');
+            estrellaTres.src = estrellas[0];
+            const estrellaCuatro = document.createElement('IMG');
+            estrellaCuatro.src = estrellas[0];
+            const estrellaCinco = document.createElement('IMG');
+            estrellaCinco.src = estrellas[0];
+            console.log('Pinto opción 5')
+        };
+
+    };
 
 
 
@@ -189,53 +303,63 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
 
-    const pintarTabla = () => {
+    const pintarTabla = (id) => { //! incompleta
 
         pintarTablaCarrito.innerHTML = '';
 
         const productos = getLocal();
 
-        productos.forEach((item) => {
-            const tableRow = document.createElement('TR');
+        let encontrarProducto = productos.find((item) => item.id == id);
 
-            const fotoTD = document.createElement('TD');
-            const foto = document.createElement('IMG');
-            foto.src = item.foto;
-
-            const nombreTD = document.createElement('TD');
-            nombreTD.textContent = item.nombre;
-
-            const precioTD = document.createElement('TD');
-            precioTD.textContent = `${item.precio.toLocaleString('de-DE')} €`;
-
-            const minusTD = document.createElement('TD');
-            const circleMinus = document.createElement('I');
-            circleMinus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-minus');
-
-            const cantidadTD = document.createElement('TD');
-            cantidadTD.textContent = '(cantidad)';
-
-            const plusTD = document.createElement('TD');
-            const circlePlus = document.createElement('I');
-            circlePlus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-plus')
-
-            const subtotalTD = document.createElement('TD');
-            subtotalTD.textContent = `${item.precio * "cantidad"}`;
-
-            const xMarkTD = document.createElement('TD');
-            const xMark = document.createElement('I');
-            xMark.classList.add('fa-sharp', 'fa-solid', 'fa-circle-xmark');
-            xMark.id = "xmark";
-            xMark.dataset['id'] = item.id;
-
+        if(encontrarProducto){
             
-            fotoTD.append(foto), minusTD.append(circleMinus), plusTD.append(circlePlus), xMarkTD.append(xMark);
+            console.log('El producto ya está subido. Lo quiero contar, pero no pintar');
+        
+        }else{
 
-            tableRow.append(fotoTD, nombreTD, precioTD, minusTD, cantidadTD, plusTD, subtotalTD, xMarkTD);
+            productos.forEach((item) => {
 
-            fragment.append(tableRow);
+                const tableRow = document.createElement('TR');
 
-        });
+                const fotoTD = document.createElement('TD');
+                const foto = document.createElement('IMG');
+                foto.src = item.foto;
+
+                const nombreTD = document.createElement('TD');
+                nombreTD.textContent = item.nombre;
+
+                const precioTD = document.createElement('TD');
+                precioTD.textContent = `${item.precio.toLocaleString('de-DE')} €`;
+
+                const minusTD = document.createElement('TD');
+                const circleMinus = document.createElement('I');
+                circleMinus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-minus');
+
+                const cantidadTD = document.createElement('TD');
+                cantidadTD.textContent = '(cantidad)';
+
+                const plusTD = document.createElement('TD');
+                const circlePlus = document.createElement('I');
+                circlePlus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-plus')
+
+                const subtotalTD = document.createElement('TD');
+                subtotalTD.textContent = `${item.precio * "cantidad"}`;
+
+                const xMarkTD = document.createElement('TD');
+                const xMark = document.createElement('I');
+                xMark.classList.add('fa-sharp', 'fa-solid', 'fa-circle-xmark');
+                xMark.id = "xmark";
+                xMark.dataset['id'] = item.id;
+
+                
+                fotoTD.append(foto), minusTD.append(circleMinus), plusTD.append(circlePlus), xMarkTD.append(xMark);
+
+                tableRow.append(fotoTD, nombreTD, precioTD, minusTD, cantidadTD, plusTD, subtotalTD, xMarkTD);
+
+                fragment.append(tableRow);
+                
+            });
+        }
 
         pintarTablaCarrito.append(fragment);
 
