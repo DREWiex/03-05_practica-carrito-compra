@@ -1,74 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/main.css">
-    <title>Práctica: carrito de compra</title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="css/main.css">
+        <title>Práctica: carrito de compra</title>
+    </head>
+    <body>
 
-    <header class="grid-container bg-color">
-        <p class="grid-item title">Práctica carrito de compra</p>
-    </header>
+        <header class="grid-container bg-color">
+            <p class="grid-item title">Práctica carrito de compra</p>
+        </header>
 
-    <main>
+        <main>
 
-        <section class="grid-container-tabla">
-            <div id="carrito" class="grid-item-tabla carrito">
-                <!-- <img src="" alt=""> -->
-            </div>
-
-            <div class="grid-item-tabla">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Imagen</th>
-                            <th>Nombre</th>
-                            <th>Precio</th>
-                            <th>Cantidad</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="pintar-tabla-carrito">
-                        <!-- <tr>
-                            <td>img</td>
-                            <td>nombre</td>
-                            <td>precio</td>
-                            <td>cantidad</td>
-                            <td>subtotal</td>
-                        </tr> -->
-                    </tbody>
-                </table>
-
-                <div id="botones-tabla">
-                    <button>Vaciar carrito</button>
-                    <button>Comprar</button>
+            <section class="grid-container-tabla">
+                <div id="carrito" class="grid-item-tabla carrito padding">
+                    <i id="icon-carrito" class="fa-sharp fa-solid fa-cart-shopping"></i>
                 </div>
-            </div>
-        </section>
 
-        <section id="productos" class="grid-container">
-            <div class="grid-item">
-                <h2>Productos</h2>
-            </div>
+                <div id="tabla-carrito" class="grid-item-tabla position-absolute">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th></th> <!-- (-) -->
+                                <th>Cantidad</th>
+                                <th></th> <!-- (+) -->
+                                <th>Subtotal</th>
+                                <th></th> <!-- (x) -->
+                            </tr>
+                        </thead>
 
-            <div id="pintar-cards" class="grid-container-cards">
-                <!-- <article class = "grid-item-cards">
-                        <div>img: producto</div>
-                        <div>h3: nombre producto</div>
-                        <div>p: precio</div>
-                        <div>img: rating (stars)</div>
-                        <div>button: añadir al carrito</div>
-                </article> -->
-            </div>
-        </section>
+                        <tbody id="pintar-tabla-carrito">
+                            <!-- <tr>
+                                <td>img</td>
+                                <td>nombre</td>
+                                <td>precio</td>
+                                <td>cantidad</td>
+                                <td>subtotal</td>
+                            </tr> -->
+                        </tbody>
+                    </table>
 
-    </main>
-    
+                    <div id="botones-tabla">
+                        <button id="btn-vaciar">Vaciar carrito</button>
+                        <button id="comprar">Comprar</button>
+                    </div>
+                </div>
+            </section>
 
-    <script src="js/main.js"></script>
-</body>
+            <section id="productos" class="grid-container">
+                <div class="grid-item">
+                    <h2>Productos</h2>
+                </div>
+
+                <div id="pintar-cards" class="grid-container-cards">
+                    <!-- <article class = "grid-item-cards">
+                            <div>img: producto</div>
+                            <div>h3: nombre producto</div>
+                            <div>p: precio</div>
+                            <div>img: rating (stars)</div>
+                            <div>button: añadir al carrito</div>
+                    </article> -->
+                </div>
+            </section>
+
+        </main>
+
+        
+        <script src="js/main.js"></script>
+    </body>
 </html>
