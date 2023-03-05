@@ -10,7 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fragment = document.createDocumentFragment();
 
-    let arrayProductosSeleccionados =  JSON.parse(localStorage.getItem('productos')) || [];
+    const arrayProductosSeleccionados =  JSON.parse(localStorage.getItem('productos')) || [];
+
+    const arrayProductosEliminados = [];
 
 
     //* Capturas *//
@@ -147,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const {solicitud} = await request();
 
         const {products} = solicitud;
-        console.log(products);
 
         let productos = products.find((item) => item.id == id);
 
@@ -247,9 +248,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const productos = getLocal();
 
         let producto = productos.find((item) => item.id == id);
+        console.log(producto);
         
-        console.log(producto)
-
     };
 
 
