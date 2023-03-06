@@ -1,7 +1,4 @@
 //TODO: Práctica carrito de compra
-//! Por hacer: calcular rating y pintar estrellas en pintarCards()
-//! Por hacer: añadir propiedades "cantidad" y "subtotal" a objeto en almacenarDatos()
-
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -12,41 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const arrayProductosSeleccionados = JSON.parse(localStorage.getItem('productos')) || [];
 
-    const estrellas = ['assets/star1.png', 'assets/star2.png'];
-
-    const arrayCategories = [
-        "smartphones",
-        "laptops",
-        "fragrances",
-        "skincare",
-        "groceries",
-        "home-decoration",
-        "furniture",
-        "tops",
-        "womens-dresses",
-        "womens-shoes",
-        "mens-shirts",
-        "mens-shoes",
-        "mens-watches",
-        "womens-watches",
-        "womens-bags",
-        "womens-jewellery",
-        "sunglasses",
-        "automotive",
-        "motorcycle",
-        "lighting"
-      ];
-
 
     //* Capturas *//
     const divCards = document.querySelector('#pintar-cards');
     const tablaCarrito = document.querySelector('#tabla-carrito');
     const pintarTablaCarrito = document.querySelector('#pintar-tabla-carrito');
     const totalFinalizarCompra = document.querySelector('#total-finalizar-compra');
-
-    //* Urls *//
-    const urlIndex = 'http://127.0.0.1:5500/index.html'
-    const urlFinalizarCompra = 'http://127.0.0.1:5500/finalizar-compra.html';
 
 
 
@@ -55,37 +23,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', ({target}) => {
 
-        if(target.matches('#comprar')){ //* cambia a la página de finalizar compra
-            location.href = urlFinalizarCompra;
+        if(target.matches('#comprar')){
+            location.href = 'finalizar-compra.html';
         };
 
-        if(target.matches('#volver')){ //* cambia a la página index
-            location.href = urlIndex;
+        if(target.matches('#volver')){
+            location.href = 'index.html';
         };
 
-        if(target.matches('#icon-carrito')){ //* muestra y oculta la tabla del carrito de compra
+        if(target.matches('#icon-carrito')){
             tablaCarrito.classList.toggle('hidden')
         };
 
-        if(target.matches('.card-btn')){ //* subir al localStorage cuando haga click en el botón
+        if(target.matches('.card-btn')){ //! incompleto
             const id = target.dataset.id;
             almacenarDatos(id);
-            pintarTabla(id);
         };
 
         if(target.matches('#xmark')){
             const id = target.dataset.id;
             eliminarProducto(id);
+            pintarTabla(id);
         }
 
         if(target.matches('#btn-vaciar')){
             localStorage.removeItem('productos');
-            location.href = urlIndex; //? si no vuelvo a cargar la página después de vaciar el carrito, si añado algo más, se va a sumar a lo anterior "vaciado"
+            location.reload();
         };
 
         if(target.matches('#btn-finalizar-compra')){
             alert('¡Has finalizado tu compra satisfactoriamente!');
             localStorage.removeItem('productos');
+            location.reload();
         };
 
 
@@ -130,7 +99,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const pintarCards = async () => { //! (pinta todas las cards)
+    const pintarEstrellas = (rating) => { //! pinta "undefined"
+
+        let divRating = document.createElement('DIV');
+
+        let totalEstrellasAmarillas = Math.round(rating);
+
+        let totalEstrellasGrises = 5 - totalEstrellasAmarillas;
+
+        for(let i = 0; i < totalEstrellasAmarillas.length; i++){
+            var estrellasAmarillas = document.createElement('IMG');
+            estrellasAmarillas.src = 'assets/star1.png';
+        }
+
+        for(let i = 0; i < totalEstrellasGrises.length; i++){
+            var estrellasGrises = document.createElement('IMG');
+            estrellasGrises.src = 'assets/star2.png';
+        }
+
+        divRating.append(estrellasAmarillas, estrellasGrises);
+
+        console.log(divRating);
+        return divRating;
+
+    }; //!FUNC-PINTARESTRELLAS
+
+
+
+    const pintarCards = async () => { //! incompleta
 
         const {ok, solicitud} = await request();
 
@@ -152,19 +148,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const elementP = document.createElement('P');
                 elementP.innerHTML = `Precio: ${item.price.toLocaleString('de-DE')} €`;
 
-                const divRating = document.createElement('DIV'); //! cambiar por IMG
-                divRating.id = "div-rating";
-                const rating = pintarEstrellas(item.id);
-                //divRating.textContent = Math.round(item.rating);
+                let imgEstrellas = pintarEstrellas(item.rating);
 
                 const elementButton = document.createElement('BUTTON');
                 elementButton.classList.add('card-btn');
                 elementButton.dataset['id'] = item.id;
                 elementButton.textContent = "Añadir al carrito";
 
-                divRating.append(rating);
-
-                elementArticle.append(elementImg, elementHeader, elementP, divRating, elementButton);
+                elementArticle.append(elementImg, elementHeader, elementP, imgEstrellas, elementButton);
 
                 fragment.append(elementArticle);
 
@@ -175,195 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
     }; //!FUNC-PINTARCARDS
-
-
-
-    // const pintarCards = async () => { //* (pinta solo tres cards)
-
-    //     const {ok, solicitud} = await request();
-
-    //     const {products} = solicitud;
-
-    //     let productos = [];
-
-    //     if(ok){
-
-    //         for(let i = 0; i < 3; i++){
-            
-    //             productos.push(products[i]);
-            
-    //         }
-
-    //         productos.forEach((item) => {
-
-    //             const elementArticle = document.createElement('ARTICLE');
-    //             elementArticle.classList.add('grid-item-cards');
-    
-    //             const elementImg = document.createElement('IMG');
-    //             elementImg.src = item.images[0];
-    
-    //             const elementHeader = document.createElement('H3');
-    //             elementHeader.innerHTML = item.title;
-    
-    //             const elementP = document.createElement('P');
-    //             elementP.innerHTML = `Precio: ${item.price.toLocaleString('de-DE')} €`;
-    
-    //             const divRating = document.createElement('DIV'); //! cambiar por IMG
-    //             divRating.id = "div-rating";
-    //             //divRating.textContent = Math.round(item.rating);
-    //             const rating = pintarEstrellas(item.id);
-    
-    //             const elementButton = document.createElement('BUTTON');
-    //             elementButton.classList.add('card-btn');
-    //             elementButton.dataset['id'] = item.id;
-    //             elementButton.textContent = "Añadir al carrito";
-
-    //             divRating.append(rating);
-        
-    //             elementArticle.append(elementImg, elementHeader, elementP, divRating, elementButton);
-    
-    //             fragment.append(elementArticle);
-    
-    //         });
-
-    //         divCards.append(fragment);
-        
-    //     }
-
-    // }; //!FUNC-PINTARCARDS
-
-
-
-    const almacenarDatos = async (id) => { //! incompleta
-
-        const {solicitud} = await request();
-
-        const {products} = solicitud;
-
-        let productos = products.find((item) => item.id == id);
-        console.log(productos);
-
-        if(productos.stock > 0){ //* valido que haya stock antes de subir al local
-
-            let objProductosTabla = { //! falta el spread(?) para cantidad y subtotal
-                id: productos.id,
-                foto: productos.thumbnail,
-                nombre: productos.title,
-                precio: productos.price,
-                rating: productos.rating,
-                stock: productos.stock,
-                //cantidad: //! falta añadir cantidad
-                //subtotal: //! falta añadir subtotal
-            }
-            
-            arrayProductosSeleccionados.push(objProductosTabla);
-            setLocal();
-
-        }else{
-
-            console.log('Stock is empty!');
-
-        }
-
-    }; //!FUNC-ALMACENARDATOS
-
-
-
-    const pintarEstrellas = async (id) => { //! "funciona", pero devuelve [object Promise]
-
-        const {solicitud} = await request();
-
-        const {products} = solicitud;
-
-        const rating = products.find((item) => item.id == id)?.rating;
-
-        let valor = Math.round(rating);
-
-        if(valor == 0){
-            const estrellaUno = document.createElement('IMG');
-            estrellaUno.src = estrellas[1];
-            const estrellaDos = document.createElement('IMG');
-            estrellaDos.src = estrellas[1];
-            const estrellaTres = document.createElement('IMG');
-            estrellaTres.src = estrellas[1];
-            const estrellaCuatro = document.createElement('IMG');
-            estrellaCuatro.src = estrellas[1];
-            const estrellaCinco = document.createElement('IMG');
-            estrellaCinco.src = estrellas[1];
-            console.log('Pinto opción 0')
-        };
-
-        if(valor == 1){
-            const estrellaUno = document.createElement('IMG');
-            estrellaUno.src = estrellas[0];
-            const estrellaDos = document.createElement('IMG');
-            estrellaDos.src = estrellas[1];
-            const estrellaTres = document.createElement('IMG');
-            estrellaTres.src = estrellas[1];
-            const estrellaCuatro = document.createElement('IMG');
-            estrellaCuatro.src = estrellas[1];
-            const estrellaCinco = document.createElement('IMG');
-            estrellaCinco.src = estrellas[1];
-            console.log('Pinto opción 1')
-        };
-
-        if(valor == 2){
-            const estrellaUno = document.createElement('IMG');
-            estrellaUno.src = estrellas[0];
-            const estrellaDos = document.createElement('IMG');
-            estrellaDos.src = estrellas[0];
-            const estrellaTres = document.createElement('IMG');
-            estrellaTres.src = estrellas[1];
-            const estrellaCuatro = document.createElement('IMG');
-            estrellaCuatro.src = estrellas[1];
-            const estrellaCinco = document.createElement('IMG');
-            estrellaCinco.src = estrellas[1];
-            console.log('Pinto opción 2')
-        };
-        
-        if(valor == 3){
-            const estrellaUno = document.createElement('IMG');
-            estrellaUno.src = estrellas[0];
-            const estrellaDos = document.createElement('IMG');
-            estrellaDos.src = estrellas[0];
-            const estrellaTres = document.createElement('IMG');
-            estrellaTres.src = estrellas[0];
-            const estrellaCuatro = document.createElement('IMG');
-            estrellaCuatro.src = estrellas[1];
-            const estrellaCinco = document.createElement('IMG');
-            estrellaCinco.src = estrellas[1];
-            console.log('Pinto opción 3')
-        };
-
-        if(valor == 4){
-            const estrellaUno = document.createElement('IMG');
-            estrellaUno.src = estrellas[0];
-            const estrellaDos = document.createElement('IMG');
-            estrellaDos.src = estrellas[0];
-            const estrellaTres = document.createElement('IMG');
-            estrellaTres.src = estrellas[0];
-            const estrellaCuatro = document.createElement('IMG');
-            estrellaCuatro.src = estrellas[0];
-            const estrellaCinco = document.createElement('IMG');
-            estrellaCinco.src = estrellas[1];
-            console.log('Pinto opción 4')
-        };
-
-        if(valor == 5){
-            const estrellaUno = document.createElement('IMG');
-            estrellaUno.src = estrellas[0];
-            const estrellaDos = document.createElement('IMG');
-            estrellaDos.src = estrellas[0];
-            const estrellaTres = document.createElement('IMG');
-            estrellaTres.src = estrellas[0];
-            const estrellaCuatro = document.createElement('IMG');
-            estrellaCuatro.src = estrellas[0];
-            const estrellaCinco = document.createElement('IMG');
-            estrellaCinco.src = estrellas[0];
-            console.log('Pinto opción 5')
-        };
-
-    };
 
 
 
@@ -381,6 +183,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }; //!FUNC-GETLOCAL
 
+
+
+    const almacenarDatos = async (id) => { //! incompleta
+
+        const {solicitud} = await request();
+
+        const {products} = solicitud;
+
+        let producto = products.find((item) => item.id == id);
+
+        if(arrayProductosSeleccionados.find((item) => item == producto)){
+
+            console.log('Producto encontrado. Quiero sumarlo, no duplicarlo.')
+
+        } else {
+            
+            let objProductosTabla = {
+                id: producto.id,
+                foto: producto.thumbnail,
+                nombre: producto.title,
+                precio: producto.price,
+                rating: producto.rating,
+                cantidad: 1,
+                subtotal: producto.price
+            }
+            
+            arrayProductosSeleccionados.push(objProductosTabla);
+
+            setLocal();
+
+            pintarTabla(id);
+
+        }
+
+    }; //!FUNC-ALMACENARDATOS
+
     
 
     const pintarTabla = (id) => { //! incompleta
@@ -389,13 +227,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const productos = getLocal();
 
-        let contador = 1;
+        let producto = productos.find((item) => item.id == id);
 
-        let encontrarProducto = productos.find((item) => item.id == id);
+        if(producto){
 
-        if(encontrarProducto){
-            
-            console.log('El producto ya está subido. Lo quiero contar, pero no pintar');
+            console.log('Producto encontrado. ')
         
         }else{
 
@@ -418,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 circleMinus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-minus');
 
                 const cantidadTD = document.createElement('TD');
-                cantidadTD.textContent = contador++;
+                cantidadTD.textContent = item.cantidad;
 
                 const plusTD = document.createElement('TD');
                 const circlePlus = document.createElement('I');
@@ -451,12 +287,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const eliminarProducto = (id) => { //! incompleta
 
-        const productos = getLocal();
+        const indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
 
-        let producto = productos.find((item) => item.id == id);
-        console.log(producto);
+        if(indexProducto != -1){
+
+            arrayProductosSeleccionados.splice(indexProducto, 1);
+
+            setLocal();
+
+        }
         
-    };
+    }; //!FUNC-ELIMINARPRODUCTO
 
 
 
@@ -475,21 +316,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const init = () => {
 
-        let url = location;
+        let url = location.toString();
 
-        if(url == urlIndex){
+        if(url.includes('finalizar')){
 
-        pintarCards();
-        pintarTabla();
+            pintarTabla();
+            pintarTotal(); //! argumento "subtotal" pendiente    
 
-        };
+        }else{
 
-        if(url == urlFinalizarCompra){
+            pintarCards();
+            pintarTabla();    
 
-        pintarTabla();
-        pintarTotal(); //! argumento "subtotal" pendiente
-
-        };
+        }
 
     }; //!FUNC-INIT
 
