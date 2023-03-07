@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const arrayProductosSeleccionados = JSON.parse(localStorage.getItem('productos')) || [];
 
+    const arrayEstrellas = ['assets/star1.png', 'assets/star2.png'];
+
 
     //* Capturas *//
     const divCards = document.querySelector('#pintar-cards');
@@ -35,9 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
             tablaCarrito.classList.toggle('hidden')
         };
 
-        if(target.matches('.card-btn')){ //! incompleto
+        if(target.matches('.card-btn')){
             const id = target.dataset.id;
-            //sumarCantidad(id);
             almacenarDatos(id);
         };
 
@@ -45,6 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const id = target.dataset.id;
             eliminarProducto(id);
             pintarTabla(id);
+        }
+
+        if(target.matches('#sumar')){
+            const id = target.dataset.id;
+            sumarProducto(id);
+        }
+
+        if(target.matches('#restar')){
+            console.log('Pintando restar');
         }
 
         if(target.matches('#btn-vaciar')){
@@ -100,33 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const pintarEstrellas = (rating) => {
-
-        let divRating = document.createElement('DIV');
-
-        let totalEstrellasAmarillas = Math.round(rating);
-
-        let totalEstrellasGrises = 5 - totalEstrellasAmarillas;
-
-
-        for(let i = 0; i < totalEstrellasAmarillas; i++){
-            let estrellasAmarillas = document.createElement('IMG');
-            estrellasAmarillas.src = 'assets/star1.png';
-            divRating.append(estrellasAmarillas);
-        }
-
-        for(let i = 0; i < totalEstrellasGrises; i++){
-            let estrellasGrises = document.createElement('IMG');
-            estrellasGrises.src = 'assets/star2.png';
-            divRating.append(estrellasGrises);
-        }
-
-        return divRating;
-
-    }; //!FUNC-PINTARESTRELLAS
-
-
-
     const pintarCards = async () => { //! incompleta
 
         const {ok, solicitud} = await request();
@@ -170,6 +153,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+    const pintarEstrellas = (rating) => {
+
+        let divRating = document.createElement('DIV');
+
+        let totalEstrellasAmarillas = Math.round(rating);
+
+        let totalEstrellasGrises = 5 - totalEstrellasAmarillas;
+
+
+        for(let i = 0; i < totalEstrellasAmarillas; i++){
+            let estrellasAmarillas = document.createElement('IMG');
+            estrellasAmarillas.src = arrayEstrellas[0];
+            divRating.append(estrellasAmarillas);
+        }
+
+        for(let i = 0; i < totalEstrellasGrises; i++){
+            let estrellasGrises = document.createElement('IMG');
+            estrellasGrises.src = arrayEstrellas[1];
+            divRating.append(estrellasGrises);
+        }
+
+        return divRating;
+
+    }; //!FUNC-PINTARESTRELLAS
+
+
+
     const setLocal = () => {
 
         localStorage.setItem('productos', JSON.stringify(arrayProductosSeleccionados));
@@ -203,6 +213,8 @@ document.addEventListener('DOMContentLoaded', () => {
             localProduct.subtotal += localProduct.precio;
 
             setLocal();
+
+            pintarTabla();
             
         } else {
 
@@ -238,12 +250,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let producto = productos.find((item) => item.id == id);
 
-        if(producto){
-
-            console.log('Producto encontrado. ')
-        
-        }else{
-
+        if(!producto){
+            
             productos.forEach((item) => {
 
                 const tableRow = document.createElement('TR');
@@ -261,13 +269,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const minusTD = document.createElement('TD');
                 const circleMinus = document.createElement('I');
                 circleMinus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-minus');
+                circleMinus.id = 'restar';
+                circleMinus.dataset['id'] = item.id;
 
                 const cantidadTD = document.createElement('TD');
                 cantidadTD.textContent = item.cantidad;
 
                 const plusTD = document.createElement('TD');
                 const circlePlus = document.createElement('I');
-                circlePlus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-plus')
+                circlePlus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-plus');
+                circlePlus.id = 'sumar';
+                circlePlus.dataset['id'] = item.id;
 
                 const subtotalTD = document.createElement('TD');
                 subtotalTD.textContent = `${item.subtotal.toLocaleString('de-DE')} €`;
@@ -307,6 +319,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
     }; //!FUNC-ELIMINARPRODUCTO
+
+
+
+    const sumarProducto = (id) => {
+
+        let indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
+
+        if(indexProducto != -1){
+
+            let localProduct = arrayProductosSeleccionados.find((item) => item.id == id);
+
+            localProduct.cantidad++;
+
+            localProduct.subtotal += localProduct.precio;
+
+            setLocal();
+
+            pintarTabla();
+        
+        }
+
+    }; //!FUNC-SUMARPRODUCTO
 
 
 
