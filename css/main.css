@@ -76,10 +76,6 @@ td{
     text-align: center;
 }
 
-td img{
-    width: 50%;
-}
-
 .flex{
     display: flex;
     justify-content: flex-end;
@@ -107,6 +103,10 @@ td img{
 
 .margin{
     margin: 80px;
+}
+
+div img{
+    width: 60%;
 }
 
 article div img{

@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         if(target.matches('#icon-carrito')){
-            tablaCarrito.classList.toggle('hidden')
+            tablaCarrito.classList.toggle('hidden');
         };
 
         if(target.matches('.card-btn')){
@@ -53,8 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
             sumarProducto(id);
         }
 
-        if(target.matches('#restar')){
-            console.log('Pintando restar');
+        if(target.matches('#restar')){ //! incompleto
+            const id = target.dataset.id;
+            restarProducto(id);
         }
 
         if(target.matches('#btn-vaciar')){
@@ -77,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const request = async () => {
 
-        let ruta = 'https://dummyjson.com/products'
+        let ruta = 'https://dummyjson.com/products';
 
         try {
 
@@ -242,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
 
-    const pintarTabla = (id) => { //! incompleta
+    const pintarTabla = (id) => {
 
         pintarTablaCarrito.innerHTML = '';
 
@@ -344,9 +345,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const pintarTotal = (subtotal) => { //! incompleto
+    const restarProducto = (id) => { //! incompleta
+
+        let indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
+
+        if(indexProducto != -1){
+
+            let localProduct = arrayProductosSeleccionados.find((item) => item.id == id);
+
+            while(localProduct.cantidad > 0) {
+                localProduct.cantidad--;
+                break;
+            }
+
+            while(localProduct.subtotal > 0) {
+                localProduct.subtotal -= localProduct.precio;
+                break;
+            }
+
+            setLocal();
+
+            pintarTabla();
+        
+        }
+
+    }; //!FUNC-RESTARPRODUCTO
+
+
+
+    const pintarTotal = (id) => { //! incompleta
 
         totalFinalizarCompra.innerHTML = '';
+
+        let producto = arrayProductosSeleccionados.find((item) => item.id == id);
+        
 
         const total = document.createElement('P');
         total.innerHTML = `<strong>Total:</strong> ${'(la suma de todos los subtotales)'}`;
@@ -364,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(url.includes('finalizar')){ //* includes() busca en una substring dentro de una string;
 
             pintarTabla();
-            pintarTotal(); //! argumento "subtotal" pendiente    
+            pintarTotal(); //! argumento "subtotal" pendiente 
 
         }else{
 
