@@ -104,21 +104,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let divRating = document.createElement('DIV');
 
-        let totalEstrellasAmarillas = Math.round(rating); //* OK
-        let estrellasAmarillas;
+        let totalEstrellasAmarillas = Math.round(rating);
 
-        let totalEstrellasGrises = 5 - totalEstrellasAmarillas; //* OK
-        let estrellasGrises;
+        let totalEstrellasGrises = 5 - totalEstrellasAmarillas;
 
 
         for(let i = 0; i < totalEstrellasAmarillas; i++){
-            estrellasAmarillas = document.createElement('IMG');
+            let estrellasAmarillas = document.createElement('IMG');
             estrellasAmarillas.src = 'assets/star1.png';
             divRating.append(estrellasAmarillas);
         }
 
         for(let i = 0; i < totalEstrellasGrises; i++){
-            estrellasGrises = document.createElement('IMG');
+            let estrellasGrises = document.createElement('IMG');
             estrellasGrises.src = 'assets/star2.png';
             divRating.append(estrellasGrises);
         }
@@ -188,23 +186,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const almacenarDatos = async (id) => { //! incompleta
+    const almacenarDatos = async (id) => {
 
         const {solicitud} = await request();
 
         const {products} = solicitud;
 
-        let producto = products.find((item) => item.id == id);
+        let indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
 
-        if(arrayProductosSeleccionados.find((item) => item == producto)){
+        if(indexProducto != -1){
 
-            // sumarCantidad(id);
+            let localProduct = arrayProductosSeleccionados.find((item) => item.id == id);
 
-            // setLocal();
+            localProduct.cantidad++;
+
+            localProduct.subtotal += localProduct.precio;
+
+            setLocal();
             
-            console.log('Producto encontrado. Quiero sumarlo, no duplicarlo.')
-
         } else {
+
+            let producto = products.find((item) => item.id == id);
             
             let objProductosTabla = {
                 id: producto.id,
@@ -225,32 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     }; //!FUNC-ALMACENARDATOS
-
-
-
-    const sumarCantidad = (id, cantidad) => { //! revisar (no funciona);
-
-        //* primero, con el id, busco el producto en arrayProductosSeleccionados
-        //* segundo, de ese array solo me interesa recuperar la propiedad/valor "cantidad"
-        //* tercero, con un splice, reemplazar "cantidad" por "cantidad++"
-        //* cuarto, volver a setear el local
-        //* por último, esta función iría en el if() –seguida de la otra función sumarSubtotal()– de la función almacenarDatos()
-
-        let producto = arrayProductosSeleccionados.find((item) => item.id == id);
-
-        let sumarCantidad = producto.cantidad++;
-
-        let indexProducto = producto.findeIndex((item) => item.cantidad == cantidad);
-
-        if(indexProducto != -1){
-            
-            let reemplazar = arrayProductosSeleccionados.splice(indexProducto, 1, sumarCantidad);
-
-            return reemplazar
-
-        }
-
-    };
 
     
 
@@ -294,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 circlePlus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-plus')
 
                 const subtotalTD = document.createElement('TD');
-                subtotalTD.textContent = `${item.precio * "cantidad"}`;
+                subtotalTD.textContent = `${item.subtotal.toLocaleString('de-DE')} €`;
 
                 const xMarkTD = document.createElement('TD');
                 const xMark = document.createElement('I');
@@ -318,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const eliminarProducto = (id) => { //! incompleta
+    const eliminarProducto = (id) => {
 
         const indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
 
