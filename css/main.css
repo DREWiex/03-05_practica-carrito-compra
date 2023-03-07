@@ -109,6 +109,11 @@ td img{
     margin: 80px;
 }
 
+article div img{
+    display: inline;
+    width: 25px;
+}
+
 /* ===================================
                      media query 768px
 ======================================*/

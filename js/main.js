@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(target.matches('.card-btn')){ //! incompleto
             const id = target.dataset.id;
+            //sumarCantidad(id);
             almacenarDatos(id);
         };
 
@@ -66,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const request = async () => {
 
-        let ruta = 'https://dummyjson.com/products/category/laptops'
+        let ruta = 'https://dummyjson.com/products'
 
         try {
 
@@ -99,27 +100,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const pintarEstrellas = (rating) => { //! pinta "undefined"
+    const pintarEstrellas = (rating) => {
 
         let divRating = document.createElement('DIV');
 
-        let totalEstrellasAmarillas = Math.round(rating);
+        let totalEstrellasAmarillas = Math.round(rating); //* OK
+        let estrellasAmarillas;
 
-        let totalEstrellasGrises = 5 - totalEstrellasAmarillas;
+        let totalEstrellasGrises = 5 - totalEstrellasAmarillas; //* OK
+        let estrellasGrises;
 
-        for(let i = 0; i < totalEstrellasAmarillas.length; i++){
-            var estrellasAmarillas = document.createElement('IMG');
+
+        for(let i = 0; i < totalEstrellasAmarillas; i++){
+            estrellasAmarillas = document.createElement('IMG');
             estrellasAmarillas.src = 'assets/star1.png';
+            divRating.append(estrellasAmarillas);
         }
 
-        for(let i = 0; i < totalEstrellasGrises.length; i++){
-            var estrellasGrises = document.createElement('IMG');
+        for(let i = 0; i < totalEstrellasGrises; i++){
+            estrellasGrises = document.createElement('IMG');
             estrellasGrises.src = 'assets/star2.png';
+            divRating.append(estrellasGrises);
         }
 
-        divRating.append(estrellasAmarillas, estrellasGrises);
-
-        console.log(divRating);
         return divRating;
 
     }; //!FUNC-PINTARESTRELLAS
@@ -195,6 +198,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(arrayProductosSeleccionados.find((item) => item == producto)){
 
+            // sumarCantidad(id);
+
+            // setLocal();
+            
             console.log('Producto encontrado. Quiero sumarlo, no duplicarlo.')
 
         } else {
@@ -218,6 +225,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     }; //!FUNC-ALMACENARDATOS
+
+
+
+    const sumarCantidad = (id, cantidad) => { //! revisar (no funciona);
+
+        //* primero, con el id, busco el producto en arrayProductosSeleccionados
+        //* segundo, de ese array solo me interesa recuperar la propiedad/valor "cantidad"
+        //* tercero, con un splice, reemplazar "cantidad" por "cantidad++"
+        //* cuarto, volver a setear el local
+        //* por último, esta función iría en el if() –seguida de la otra función sumarSubtotal()– de la función almacenarDatos()
+
+        let producto = arrayProductosSeleccionados.find((item) => item.id == id);
+
+        let sumarCantidad = producto.cantidad++;
+
+        let indexProducto = producto.findeIndex((item) => item.cantidad == cantidad);
+
+        if(indexProducto != -1){
+            
+            let reemplazar = arrayProductosSeleccionados.splice(indexProducto, 1, sumarCantidad);
+
+            return reemplazar
+
+        }
+
+    };
 
     
 
@@ -318,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let url = location.toString();
 
-        if(url.includes('finalizar')){
+        if(url.includes('finalizar')){ //* includes() busca en una substring dentro de una string;
 
             pintarTabla();
             pintarTotal(); //! argumento "subtotal" pendiente    
