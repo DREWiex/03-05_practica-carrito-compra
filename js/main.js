@@ -40,12 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if(target.matches('.card-btn')){
             const id = target.dataset.id;
             almacenarDatos(id);
+            pintarTabla();
         };
 
         if(target.matches('#xmark')){
             const id = target.dataset.id;
             eliminarProducto(id);
-            pintarTabla(id);
         }
 
         if(target.matches('#sumar')){
@@ -207,15 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(indexProducto != -1){
 
-            let localProduct = arrayProductosSeleccionados.find((item) => item.id == id);
-
-            localProduct.cantidad++;
-
-            localProduct.subtotal += localProduct.precio;
-
-            setLocal();
-
-            pintarTabla();
+            sumarProducto(id);
             
         } else {
 
@@ -233,11 +225,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             arrayProductosSeleccionados.push(objProductosTabla);
 
-            setLocal();
-
-            pintarTabla(id);
-
         }
+
+        setLocal();
 
     }; //!FUNC-ALMACENARDATOS
 
@@ -316,6 +306,8 @@ document.addEventListener('DOMContentLoaded', () => {
             arrayProductosSeleccionados.splice(indexProducto, 1);
 
             setLocal();
+
+            pintarTabla(id);
 
         }
         
