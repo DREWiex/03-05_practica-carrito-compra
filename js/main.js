@@ -40,25 +40,35 @@ document.addEventListener('DOMContentLoaded', () => {
         if(target.matches('.card-btn')){
             const id = target.dataset.id;
             almacenarDatos(id);
+            setLocal();
             pintarTabla();
         };
 
-        if(target.matches('#xmark')){
-            const id = target.dataset.id;
-            eliminarProducto(id);
-        }
-
-        if(target.matches('#sumar')){
+        if(target.matches('#sumar-producto')){
             const id = target.dataset.id;
             sumarProducto(id);
-        }
+            setLocal();
+            pintarTabla();
+            pintarTotal();
+        };
 
-        if(target.matches('#restar')){ //! incompleto
+        if(target.matches('#restar-producto')){
             const id = target.dataset.id;
             restarProducto(id);
-        }
+            setLocal();
+            pintarTabla();
+            pintarTotal();
+        };
 
-        if(target.matches('#btn-vaciar')){
+        if(target.matches('#eliminar-producto')){
+            const id = target.dataset.id;
+            eliminarProducto(id);
+            setLocal();
+            pintarTabla();
+            pintarTotal();
+        };
+
+        if(target.matches('#btn-vaciar-carrito')){
             localStorage.removeItem('productos');
             location.reload();
         };
@@ -69,8 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
             location.reload();
         };
 
-
     });
+
 
 
 
@@ -111,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const pintarCards = async () => { //! incompleta
+    const pintarCards = async () => {
 
         const {ok, solicitud} = await request();
 
@@ -227,69 +237,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
         }
 
-        setLocal();
-
     }; //!FUNC-ALMACENARDATOS
 
     
 
-    const pintarTabla = (id) => {
+    const pintarTabla = () => {
 
         pintarTablaCarrito.innerHTML = '';
 
         const productos = getLocal();
-
-        let producto = productos.find((item) => item.id == id);
-
-        if(!producto){
             
-            productos.forEach((item) => {
+        productos.forEach((item) => {
 
-                const tableRow = document.createElement('TR');
+            const tableRow = document.createElement('TR');
 
-                const fotoTD = document.createElement('TD');
-                const foto = document.createElement('IMG');
-                foto.src = item.foto;
+            const fotoTD = document.createElement('TD');
+            const foto = document.createElement('IMG');
+            foto.src = item.foto;
 
-                const nombreTD = document.createElement('TD');
-                nombreTD.textContent = item.nombre;
+            const nombreTD = document.createElement('TD');
+            nombreTD.textContent = item.nombre;
 
-                const precioTD = document.createElement('TD');
-                precioTD.textContent = `${item.precio.toLocaleString('de-DE')} €`;
+            const precioTD = document.createElement('TD');
+            precioTD.textContent = `${item.precio.toLocaleString('de-DE')} €`;
 
-                const minusTD = document.createElement('TD');
-                const circleMinus = document.createElement('I');
-                circleMinus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-minus');
-                circleMinus.id = 'restar';
-                circleMinus.dataset['id'] = item.id;
+            const minusTD = document.createElement('TD');
+            const circleMinus = document.createElement('I');
+            circleMinus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-minus');
+            circleMinus.id = 'restar-producto';
+            circleMinus.dataset['id'] = item.id;
 
-                const cantidadTD = document.createElement('TD');
-                cantidadTD.textContent = item.cantidad;
+            const cantidadTD = document.createElement('TD');
+            cantidadTD.textContent = item.cantidad;
 
-                const plusTD = document.createElement('TD');
-                const circlePlus = document.createElement('I');
-                circlePlus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-plus');
-                circlePlus.id = 'sumar';
-                circlePlus.dataset['id'] = item.id;
+            const plusTD = document.createElement('TD');
+            const circlePlus = document.createElement('I');
+            circlePlus.classList.add('fa-sharp', 'fa-solid', 'fa-circle-plus');
+            circlePlus.id = 'sumar-producto';
+            circlePlus.dataset['id'] = item.id;
 
-                const subtotalTD = document.createElement('TD');
-                subtotalTD.textContent = `${item.subtotal.toLocaleString('de-DE')} €`;
+            const subtotalTD = document.createElement('TD');
+            subtotalTD.textContent = `${item.subtotal.toLocaleString('de-DE')} €`;
 
-                const xMarkTD = document.createElement('TD');
-                const xMark = document.createElement('I');
-                xMark.classList.add('fa-sharp', 'fa-solid', 'fa-circle-xmark');
-                xMark.id = "xmark";
-                xMark.dataset['id'] = item.id;
+            const xMarkTD = document.createElement('TD');
+            const xMark = document.createElement('I');
+            xMark.classList.add('fa-sharp', 'fa-solid', 'fa-circle-xmark');
+            xMark.id = "eliminar-producto";
+            xMark.dataset['id'] = item.id;
 
-                
-                fotoTD.append(foto), minusTD.append(circleMinus), plusTD.append(circlePlus), xMarkTD.append(xMark);
+            
+            fotoTD.append(foto), minusTD.append(circleMinus), plusTD.append(circlePlus), xMarkTD.append(xMark);
 
-                tableRow.append(fotoTD, nombreTD, precioTD, minusTD, cantidadTD, plusTD, subtotalTD, xMarkTD);
+            tableRow.append(fotoTD, nombreTD, precioTD, minusTD, cantidadTD, plusTD, subtotalTD, xMarkTD);
 
-                fragment.append(tableRow);
-                
-            });
-        }
+            fragment.append(tableRow);
+            
+        });
 
         pintarTablaCarrito.append(fragment);
 
@@ -305,11 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             arrayProductosSeleccionados.splice(indexProducto, 1);
 
-            setLocal();
-
-            pintarTabla(id);
-
-        }
+        };
         
     }; //!FUNC-ELIMINARPRODUCTO
 
@@ -326,56 +325,44 @@ document.addEventListener('DOMContentLoaded', () => {
             localProduct.cantidad++;
 
             localProduct.subtotal += localProduct.precio;
-
-            setLocal();
-
-            pintarTabla();
         
-        }
+        };
 
     }; //!FUNC-SUMARPRODUCTO
 
 
 
-    const restarProducto = (id) => { //! incompleta
+    const restarProducto = (id) => {
 
-        let indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
+        let producto = arrayProductosSeleccionados.find((item) => item.id == id);
 
-        if(indexProducto != -1){
+        if(producto.cantidad > 1){
 
-            let localProduct = arrayProductosSeleccionados.find((item) => item.id == id);
+            producto.cantidad--;
+            producto.subtotal -= producto.precio;
 
-            while(localProduct.cantidad > 0) {
-                localProduct.cantidad--;
-                break;
-            }
+        } else {
 
-            while(localProduct.subtotal > 0) {
-                localProduct.subtotal -= localProduct.precio;
-                break;
-            }
+            eliminarProducto(id);
 
-            setLocal();
-
-            pintarTabla();
-        
-        }
+        };
 
     }; //!FUNC-RESTARPRODUCTO
 
 
 
-    const pintarTotal = (id) => { //! incompleta
+    const pintarTotal = () => { //! pendiente error reduce() cuando let subtotales = 0 (ver console.log())
 
         totalFinalizarCompra.innerHTML = '';
 
-        let producto = arrayProductosSeleccionados.find((item) => item.id == id);
-        
+        let subtotales = arrayProductosSeleccionados.map((item) => item.subtotal);
 
-        const total = document.createElement('P');
-        total.innerHTML = `<strong>Total:</strong> ${'(la suma de todos los subtotales)'}`;
+        let total = subtotales.reduce((a, b) => a + b);        
 
-        totalFinalizarCompra.append(total);
+        const elementTotal = document.createElement('P');
+        elementTotal.innerHTML = `<strong>Total:</strong> ${total.toLocaleString('de-DE')} €`;
+
+        totalFinalizarCompra.append(elementTotal);
 
     }; //!FUNC-PINTARTOTAL
 
@@ -388,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(url.includes('finalizar')){ //* includes() busca en una substring dentro de una string;
 
             pintarTabla();
-            pintarTotal(); //! argumento "subtotal" pendiente 
+            pintarTotal();
 
         }else{
 
