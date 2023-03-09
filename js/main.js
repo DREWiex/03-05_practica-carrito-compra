@@ -351,18 +351,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const pintarTotal = () => { //! pendiente error reduce() cuando let subtotales = 0 (ver console.log())
+    const pintarTotal = () => {
 
         totalFinalizarCompra.innerHTML = '';
 
         let subtotales = arrayProductosSeleccionados.map((item) => item.subtotal);
 
-        let total = subtotales.reduce((a, b) => a + b);        
+        if(subtotales == 0){
 
-        const elementTotal = document.createElement('P');
-        elementTotal.innerHTML = `<strong>Total:</strong> ${total.toLocaleString('de-DE')} €`;
+            let total = 0;
 
-        totalFinalizarCompra.append(elementTotal);
+            const elementTotal = document.createElement('P');
+            elementTotal.innerHTML = `<strong>Total:</strong> ${total.toLocaleString('de-DE')} €`;
+    
+            totalFinalizarCompra.append(elementTotal);    
+
+        } else {
+
+            let total = subtotales.reduce((a, b) => a + b);        
+
+            const elementTotal = document.createElement('P');
+            elementTotal.innerHTML = `<strong>Total:</strong> ${total.toLocaleString('de-DE')} €`;
+
+            totalFinalizarCompra.append(elementTotal);
+
+        }
 
     }; //!FUNC-PINTARTOTAL
 
