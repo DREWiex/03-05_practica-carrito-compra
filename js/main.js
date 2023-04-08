@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const arrayEstrellas = ['assets/star1.png', 'assets/star2.png'];
 
-    const urlBaseProducts = 'https://dummyjson.com/products';
-    const urlBaseCategories = 'https://dummyjson.com/products/categories';
+    const urlProducts = 'https://dummyjson.com/products';
+    const urlCategories = 'https://dummyjson.com/products/categories';
 
 
     //* Capturas *//
@@ -71,12 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
             location.reload();
         };
 
-
-
-        if(target.matches('#category')){
-            console.log(target.value);
-        }
-
     });
 
 
@@ -118,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const pintarCards = async () => {
 
-        const { response } = await fetchingData(urlBaseProducts);
+        const { response } = await fetchingData(urlProducts);
 
         const { products } = response;
             
@@ -182,9 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const pintarCategorias = async () => {
 
-        const { response } = await fetchingData(urlBaseCategories);
-
-        console.log(response)
+        const { response } = await fetchingData(urlCategories);
 
         selectCategorias.innerHTML = '';
 
@@ -215,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const almacenarDatos = async (id) => {
 
-        const { response } = await fetchingData(urlBaseProducts);
+        const { response } = await fetchingData(urlProducts);
 
         const { products } = response;
 
