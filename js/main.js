@@ -37,11 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
             tablaCarrito.classList.toggle('hidden');
         };
 
-        if(target.matches('.card-btn')){
+        if(target.matches('#card-btn')){
             const id = target.dataset.id;
             almacenarDatos(id);
-            setLocal();
-            pintarTabla();
         };
 
         if(target.matches('#sumar-producto')){
@@ -86,48 +84,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //*** FUNCIONES ***//
 
-    const request = async () => {
+    const fetchingData = async () => {
 
-        let ruta = 'https://dummyjson.com/products';
+        let url = 'https://dummyjson.com/products';
 
         try {
 
-            let solicitud = await fetch(ruta, {});
+            const request = await fetch(url);
 
-            if(solicitud.ok){
-
-                solicitud = await solicitud.json();
+            if(request.ok){
+                
+                const response = await request.json();
 
                 return{
                     ok: true,
-                    solicitud
-                }
+                    response
+                };
 
             }else{
 
-                throw({
-                    mensaje: 'Error en la petición'
-                })
-            }
+                throw('ERROR: Fetch');
+            
+            };
             
         } catch (error) {
 
             return {
                 ok: false,
                 error
-            }
-        }            
-    }; //!FUNC-REQUEST
+            };
 
+        };
+
+    }; //!FUNC-FETCHINGDATA
 
 
     const pintarCards = async () => {
 
-        const {ok, solicitud} = await request();
+        const { response } = await fetchingData();
 
-        const {products} = solicitud;
-
-        if(ok){
+        const { products } = response;
             
             products.forEach((item) => {
 
@@ -146,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let imgEstrellas = pintarEstrellas(item.rating);
 
                 const elementButton = document.createElement('BUTTON');
-                elementButton.classList.add('card-btn');
+                elementButton.id = 'card-btn';
                 elementButton.dataset['id'] = item.id;
                 elementButton.textContent = "Añadir al carrito";
 
@@ -156,12 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             });
 
-            divCards.append(fragment);
-
-        };
+        divCards.append(fragment);
 
     }; //!FUNC-PINTARCARDS
-
 
 
     const pintarEstrellas = (rating) => {
@@ -190,13 +183,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }; //!FUNC-PINTARESTRELLAS
 
 
-
     const setLocal = () => {
 
         localStorage.setItem('productos', JSON.stringify(arrayProductosSeleccionados));
 
     }; //!FUNC-SETLOCAL
-
 
 
     const getLocal = () => {
@@ -209,21 +200,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const almacenarDatos = async (id) => {
 
-        const {solicitud} = await request();
+        const { response } = await fetchingData();
 
-        const {products} = solicitud;
+        const { products } = response;
 
-        let indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
+        const indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
 
         if(indexProducto != -1){
 
-            sumarProducto(id);
+            const producto = arrayProductosSeleccionados.find((item) => item.id == id);
+
+            producto.cantidad++;
+
+            producto.subtotal += producto.precio;
+
+            setLocal();
+            pintarTabla();
             
         } else {
 
-            let producto = products.find((item) => item.id == id);
+            const producto = products.find((item) => item.id == id);
             
-            let objProductosTabla = {
+            const objProductoTabla = {
                 id: producto.id,
                 foto: producto.thumbnail,
                 nombre: producto.title,
@@ -231,11 +229,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 rating: producto.rating,
                 cantidad: 1,
                 subtotal: producto.price
-            }
+            };
             
-            arrayProductosSeleccionados.push(objProductosTabla);
+            arrayProductosSeleccionados.push(objProductoTabla);
 
-        }
+        };
 
     }; //!FUNC-ALMACENARDATOS
 
@@ -311,24 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
     }; //!FUNC-ELIMINARPRODUCTO
-
-
-
-    const sumarProducto = (id) => {
-
-        let indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
-
-        if(indexProducto != -1){
-
-            let localProduct = arrayProductosSeleccionados.find((item) => item.id == id);
-
-            localProduct.cantidad++;
-
-            localProduct.subtotal += localProduct.precio;
-        
-        };
-
-    }; //!FUNC-SUMARPRODUCTO
 
 
 
