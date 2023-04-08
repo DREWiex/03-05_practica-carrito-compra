@@ -11,12 +11,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const arrayEstrellas = ['assets/star1.png', 'assets/star2.png'];
 
+    const urlBaseProducts = 'https://dummyjson.com/products';
+    const urlBaseCategories = 'https://dummyjson.com/products/categories';
+
 
     //* Capturas *//
     const divCards = document.querySelector('#pintar-cards');
     const tablaCarrito = document.querySelector('#tabla-carrito');
     const pintarTablaCarrito = document.querySelector('#pintar-tabla-carrito');
     const totalFinalizarCompra = document.querySelector('#total-finalizar-compra');
+    const selectCategorias = document.querySelector('#select-categories');
 
 
 
@@ -67,15 +71,19 @@ document.addEventListener('DOMContentLoaded', () => {
             location.reload();
         };
 
+
+
+        if(target.matches('#category')){
+            console.log(target.value);
+        }
+
     });
 
 
 
     //*** FUNCIONES ***//
 
-    const fetchingData = async () => {
-
-        let url = 'https://dummyjson.com/products';
+    const fetchingData = async (url) => {
 
         try {
 
@@ -110,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const pintarCards = async () => {
 
-        const { response } = await fetchingData();
+        const { response } = await fetchingData(urlBaseProducts);
 
         const { products } = response;
             
@@ -172,6 +180,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }; //!FUNC-PINTARESTRELLAS
 
 
+    const pintarCategorias = async () => {
+
+        const { response } = await fetchingData(urlBaseCategories);
+
+        console.log(response)
+
+        selectCategorias.innerHTML = '';
+
+        response.forEach(item => {
+
+            const optCategory = document.createElement('OPTION');
+            optCategory.value = item;
+            optCategory.textContent = item;
+
+            fragment.append(optCategory);
+
+        });
+
+        const optEmpty = document.createElement('OPTION');
+        optEmpty.textContent = '-- Elige una categoría --'
+
+        selectCategorias.append(optEmpty, fragment);
+
+    }; //!FUNC-PINTARCATEGORIAS
+
+
     const setLocal = () => {
 
         localStorage.setItem('productos', JSON.stringify(arrayProductosSeleccionados));
@@ -181,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const almacenarDatos = async (id) => {
 
-        const { response } = await fetchingData();
+        const { response } = await fetchingData(urlBaseProducts);
 
         const { products } = response;
 
@@ -197,6 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setLocal();
             pintarTabla();
+            pintarTotal();
             
         } else {
 
@@ -209,10 +244,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 precio: producto.price,
                 rating: producto.rating,
                 cantidad: 1,
-                subtotal: producto.price
+                subtotal: producto.price,
             };
             
             arrayProductosSeleccionados.push(objProductoTabla);
+
+            setLocal();
+            pintarTabla();
+            pintarTotal()
 
         };
 
@@ -310,7 +349,6 @@ document.addEventListener('DOMContentLoaded', () => {
             eliminarProducto(id);
             setLocal();
             pintarTabla();
-            pintarTotal();
 
         };
 
@@ -358,6 +396,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }else{
 
             pintarCards();
+            pintarCategorias();
+            pintarTabla();
 
         };
 
