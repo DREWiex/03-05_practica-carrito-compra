@@ -11,13 +11,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const arrayEstrellas = ['assets/star1.png', 'assets/star2.png'];
 
+    const urlProducts = 'https://dummyjson.com/products';
+    const urlCategories = 'https://dummyjson.com/products/categories';
+
 
     //* Capturas *//
     const divCards = document.querySelector('#pintar-cards');
     const tablaCarrito = document.querySelector('#tabla-carrito');
     const pintarTablaCarrito = document.querySelector('#pintar-tabla-carrito');
     const totalFinalizarCompra = document.querySelector('#total-finalizar-compra');
-
+    const selectCategorias = document.querySelector('#select-categories');
 
 
 
@@ -37,35 +40,24 @@ document.addEventListener('DOMContentLoaded', () => {
             tablaCarrito.classList.toggle('hidden');
         };
 
-        if(target.matches('.card-btn')){
+        if(target.matches('#card-btn')){
             const id = target.dataset.id;
             almacenarDatos(id);
-            setLocal();
-            pintarTabla();
         };
 
         if(target.matches('#sumar-producto')){
             const id = target.dataset.id;
-            sumarProducto(id);
-            setLocal();
-            pintarTabla();
-            pintarTotal();
+            almacenarDatos(id);
         };
 
         if(target.matches('#restar-producto')){
             const id = target.dataset.id;
             restarProducto(id);
-            setLocal();
-            pintarTabla();
-            pintarTotal();
         };
 
         if(target.matches('#eliminar-producto')){
             const id = target.dataset.id;
             eliminarProducto(id);
-            setLocal();
-            pintarTabla();
-            pintarTotal();
         };
 
         if(target.matches('#btn-vaciar-carrito')){
@@ -83,51 +75,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
     //*** FUNCIONES ***//
 
-    const request = async () => {
-
-        let ruta = 'https://dummyjson.com/products';
+    const fetchingData = async (url) => {
 
         try {
 
-            let solicitud = await fetch(ruta, {});
+            const request = await fetch(url);
 
-            if(solicitud.ok){
-
-                solicitud = await solicitud.json();
+            if(request.ok){
+                
+                const response = await request.json();
 
                 return{
                     ok: true,
-                    solicitud
-                }
+                    response
+                };
 
             }else{
 
-                throw({
-                    mensaje: 'Error en la petición'
-                })
-            }
+                throw('ERROR: Fetch');
+            
+            };
             
         } catch (error) {
 
             return {
                 ok: false,
                 error
-            }
-        }            
-    }; //!FUNC-REQUEST
+            };
 
+        };
+
+    }; //!FUNC-FETCHINGDATA
 
 
     const pintarCards = async () => {
 
-        const {ok, solicitud} = await request();
+        const { response } = await fetchingData(urlProducts);
 
-        const {products} = solicitud;
-
-        if(ok){
+        const { products } = response;
             
             products.forEach((item) => {
 
@@ -146,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let imgEstrellas = pintarEstrellas(item.rating);
 
                 const elementButton = document.createElement('BUTTON');
-                elementButton.classList.add('card-btn');
+                elementButton.id = 'card-btn';
                 elementButton.dataset['id'] = item.id;
                 elementButton.textContent = "Añadir al carrito";
 
@@ -156,12 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             });
 
-            divCards.append(fragment);
-
-        };
+        divCards.append(fragment);
 
     }; //!FUNC-PINTARCARDS
-
 
 
     const pintarEstrellas = (rating) => {
@@ -190,6 +174,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }; //!FUNC-PINTARESTRELLAS
 
 
+    const pintarCategorias = async () => {
+
+        const { response } = await fetchingData(urlCategories);
+
+        selectCategorias.innerHTML = '';
+
+        response.forEach(item => {
+
+            const optCategory = document.createElement('OPTION');
+            optCategory.value = item;
+            optCategory.textContent = item;
+
+            fragment.append(optCategory);
+
+        });
+
+        const optEmpty = document.createElement('OPTION');
+        optEmpty.textContent = '-- Elige una categoría --'
+
+        selectCategorias.append(optEmpty, fragment);
+
+    }; //!FUNC-PINTARCATEGORIAS
+
 
     const setLocal = () => {
 
@@ -198,56 +205,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }; //!FUNC-SETLOCAL
 
 
-
-    const getLocal = () => {
-
-        return JSON.parse(localStorage.getItem('productos')) || [];
-
-    }; //!FUNC-GETLOCAL
-
-
-
     const almacenarDatos = async (id) => {
 
-        const {solicitud} = await request();
+        const { response } = await fetchingData(urlProducts);
 
-        const {products} = solicitud;
+        const { products } = response;
 
-        let indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
+        const index = arrayProductosSeleccionados.findIndex((item) => item.id == id);
 
-        if(indexProducto != -1){
+        if(index != -1){
 
-            sumarProducto(id);
+            const producto = arrayProductosSeleccionados.find((item) => item.id == id);
+
+            producto.cantidad++;
+
+            producto.subtotal += producto.precio;
+
+            setLocal();
+            pintarTabla();
+            pintarTotal();
             
         } else {
 
-            let producto = products.find((item) => item.id == id);
+            const producto = products.find((item) => item.id == id);
             
-            let objProductosTabla = {
+            const objProductoTabla = {
                 id: producto.id,
                 foto: producto.thumbnail,
                 nombre: producto.title,
                 precio: producto.price,
                 rating: producto.rating,
                 cantidad: 1,
-                subtotal: producto.price
-            }
+                subtotal: producto.price,
+            };
             
-            arrayProductosSeleccionados.push(objProductosTabla);
+            arrayProductosSeleccionados.push(objProductoTabla);
 
-        }
+            setLocal();
+            pintarTabla();
+            pintarTotal()
+
+        };
 
     }; //!FUNC-ALMACENARDATOS
 
-    
 
     const pintarTabla = () => {
 
         pintarTablaCarrito.innerHTML = '';
-
-        const productos = getLocal();
             
-        productos.forEach((item) => {
+        arrayProductosSeleccionados.forEach((item) => {
 
             const tableRow = document.createElement('TR');
 
@@ -299,37 +306,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }; //! FUNC-PINTARTABLA
 
 
-
     const eliminarProducto = (id) => {
 
-        const indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
+        const index = arrayProductosSeleccionados.findIndex((item) => item.id == id);
 
-        if(indexProducto != -1){
+        if(index != -1){
 
-            arrayProductosSeleccionados.splice(indexProducto, 1);
+            arrayProductosSeleccionados.splice(index, 1);
+
+            setLocal();
+            pintarTabla();
+            pintarTotal();
 
         };
         
     }; //!FUNC-ELIMINARPRODUCTO
-
-
-
-    const sumarProducto = (id) => {
-
-        let indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
-
-        if(indexProducto != -1){
-
-            let localProduct = arrayProductosSeleccionados.find((item) => item.id == id);
-
-            localProduct.cantidad++;
-
-            localProduct.subtotal += localProduct.precio;
-        
-        };
-
-    }; //!FUNC-SUMARPRODUCTO
-
 
 
     const restarProducto = (id) => {
@@ -341,21 +332,26 @@ document.addEventListener('DOMContentLoaded', () => {
             producto.cantidad--;
             producto.subtotal -= producto.precio;
 
+            setLocal();
+            pintarTabla();
+            pintarTotal();
+
         } else {
 
             eliminarProducto(id);
+            setLocal();
+            pintarTabla();
 
         };
 
     }; //!FUNC-RESTARPRODUCTO
 
 
-
     const pintarTotal = () => {
 
         totalFinalizarCompra.innerHTML = '';
 
-        let subtotales = arrayProductosSeleccionados.map((item) => item.subtotal);
+        let subtotales = arrayProductosSeleccionados.map(item => item.subtotal);
 
         if(subtotales == 0){
 
@@ -375,10 +371,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             totalFinalizarCompra.append(elementTotal);
 
-        }
+        };
 
     }; //!FUNC-PINTARTOTAL
-
 
 
     const init = () => {
@@ -393,9 +388,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }else{
 
             pintarCards();
-            pintarTabla();    
+            pintarCategorias();
+            pintarTabla();
 
-        }
+        };
 
     }; //!FUNC-INIT
 
