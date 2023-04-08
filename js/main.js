@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
     //*** EVENTOS ***//
 
     document.addEventListener('click', ({target}) => {
@@ -44,26 +43,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(target.matches('#sumar-producto')){
             const id = target.dataset.id;
-            sumarProducto(id);
-            setLocal();
-            pintarTabla();
-            pintarTotal();
+            almacenarDatos(id);
         };
 
         if(target.matches('#restar-producto')){
             const id = target.dataset.id;
             restarProducto(id);
-            setLocal();
-            pintarTabla();
-            pintarTotal();
         };
 
         if(target.matches('#eliminar-producto')){
             const id = target.dataset.id;
             eliminarProducto(id);
-            setLocal();
-            pintarTabla();
-            pintarTotal();
         };
 
         if(target.matches('#btn-vaciar-carrito')){
@@ -78,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
     });
-
 
 
 
@@ -190,23 +179,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }; //!FUNC-SETLOCAL
 
 
-    const getLocal = () => {
-
-        return JSON.parse(localStorage.getItem('productos')) || [];
-
-    }; //!FUNC-GETLOCAL
-
-
-
     const almacenarDatos = async (id) => {
 
         const { response } = await fetchingData();
 
         const { products } = response;
 
-        const indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
+        const index = arrayProductosSeleccionados.findIndex((item) => item.id == id);
 
-        if(indexProducto != -1){
+        if(index != -1){
 
             const producto = arrayProductosSeleccionados.find((item) => item.id == id);
 
@@ -237,15 +218,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }; //!FUNC-ALMACENARDATOS
 
-    
 
     const pintarTabla = () => {
 
         pintarTablaCarrito.innerHTML = '';
-
-        const productos = getLocal();
             
-        productos.forEach((item) => {
+        arrayProductosSeleccionados.forEach((item) => {
 
             const tableRow = document.createElement('TR');
 
@@ -297,19 +275,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }; //! FUNC-PINTARTABLA
 
 
-
     const eliminarProducto = (id) => {
 
-        const indexProducto = arrayProductosSeleccionados.findIndex((item) => item.id == id);
+        const index = arrayProductosSeleccionados.findIndex((item) => item.id == id);
 
-        if(indexProducto != -1){
+        if(index != -1){
 
-            arrayProductosSeleccionados.splice(indexProducto, 1);
+            arrayProductosSeleccionados.splice(index, 1);
+
+            setLocal();
+            pintarTabla();
+            pintarTotal();
 
         };
         
     }; //!FUNC-ELIMINARPRODUCTO
-
 
 
     const restarProducto = (id) => {
@@ -321,21 +301,27 @@ document.addEventListener('DOMContentLoaded', () => {
             producto.cantidad--;
             producto.subtotal -= producto.precio;
 
+            setLocal();
+            pintarTabla();
+            pintarTotal();
+
         } else {
 
             eliminarProducto(id);
+            setLocal();
+            pintarTabla();
+            pintarTotal();
 
         };
 
     }; //!FUNC-RESTARPRODUCTO
 
 
-
     const pintarTotal = () => {
 
         totalFinalizarCompra.innerHTML = '';
 
-        let subtotales = arrayProductosSeleccionados.map((item) => item.subtotal);
+        let subtotales = arrayProductosSeleccionados.map(item => item.subtotal);
 
         if(subtotales == 0){
 
@@ -355,10 +341,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             totalFinalizarCompra.append(elementTotal);
 
-        }
+        };
 
     }; //!FUNC-PINTARTOTAL
-
 
 
     const init = () => {
@@ -373,9 +358,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }else{
 
             pintarCards();
-            pintarTabla();    
 
-        }
+        };
 
     }; //!FUNC-INIT
 
